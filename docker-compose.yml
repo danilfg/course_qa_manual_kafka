@@ -1,0 +1,80 @@
+version: '3.8' # Версия Docker Compose
+
+services:
+  zookeeper: # Сервис Zookeeper для управления Kafka-брокерами
+    image: confluentinc/cp-zookeeper:7.5.0 # Docker-образ Zookeeper от Confluent
+    hostname: zookeeper # Имя хоста контейнера
+    container_name: zookeeper # Имя контейнера
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181 # Порт для подключения клиентов
+      ZOOKEEPER_TICK_TIME: 2000 # Интервал времени (в мс) для проверки состояния
+    ports:
+      - "2181:2181" # Проброс порта для доступа к Zookeeper
+
+  kafka1: # Первый Kafka-брокер
+    image: confluentinc/cp-kafka:7.5.0 # Docker-образ Kafka от Confluent
+    hostname: kafka1 # Имя хоста контейнера
+    container_name: kafka1 # Имя контейнера
+    depends_on: # Сначала должен быть запущен Zookeeper
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1 # Уникальный ID брокера в кластере
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181 # Адрес подключения к Zookeeper
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT # Протоколы связи
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka1:29092,OUTSIDE://localhost:9092 # Адреса для внутреннего и внешнего подключения
+      KAFKA_LISTENERS: INSIDE://0.0.0.0:29092,OUTSIDE://0.0.0.0:9092 # Слушатели для внутренних и внешних подключений
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE # Используется для связи между брокерами
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1 # Коэффициент репликации топика offset
+    ports:
+      - "9092:9092" # Проброс порта для подключения к брокеру
+    volumes:
+      - kafka1_data:/var/lib/kafka/data # Том для хранения данных Kafka
+
+  kafka2: # Второй Kafka-брокер
+    image: confluentinc/cp-kafka:7.5.0 # Docker-образ Kafka от Confluent
+    hostname: kafka2 # Имя хоста контейнера
+    container_name: kafka2 # Имя контейнера
+    depends_on: # Сначала должен быть запущен Zookeeper
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 2 # Уникальный ID второго брокера
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181 # Адрес подключения к Zookeeper
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT # Протоколы связи
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka2:29092,OUTSIDE://localhost:9093 # Адреса для внутреннего и внешнего подключения
+      KAFKA_LISTENERS: INSIDE://0.0.0.0:29092,OUTSIDE://0.0.0.0:9093 # Слушатели для внутренних и внешних подключений
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE # Используется для связи между брокерами
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1 # Коэффициент репликации топика offset
+    ports:
+      - "9093:9093" # Проброс порта для подключения к брокеру
+    volumes:
+      - kafka2_data:/var/lib/kafka/data # Том для хранения данных Kafka
+
+  rest-proxy: # Сервис REST Proxy для HTTP-доступа к Kafka
+    image: confluentinc/cp-kafka-rest:7.5.0 # Docker-образ REST Proxy от Confluent
+    container_name: rest-proxy # Имя контейнера
+    hostname: rest-proxy # Имя хоста контейнера
+    depends_on: # REST Proxy зависит от Kafka-брокеров
+      - kafka1
+      - kafka2
+    environment:
+      KAFKA_REST_HOST_NAME: rest-proxy # Имя REST Proxy
+      KAFKA_REST_BOOTSTRAP_SERVERS: kafka1:29092,kafka2:29092 # Адреса Kafka-брокеров
+      KAFKA_REST_LISTENERS: http://0.0.0.0:8082 # Порт, на котором слушает REST Proxy
+      KAFKA_REST_ACCESS_CONTROL_ALLOW_ORIGIN: "*" # Разрешение для всех источников (CORS)
+      KAFKA_REST_ACCESS_CONTROL_ALLOW_METHODS: "GET,POST,PUT,DELETE,OPTIONS" # Разрешенные HTTP-методы
+    ports:
+      - "8082:8082" # Проброс порта для доступа к REST Proxy
+
+  kafka-ui: # UI для управления Kafka
+    image: provectuslabs/kafka-ui:latest # Docker-образ Kafka UI
+    container_name: kafka-ui # Имя контейнера
+    ports:
+      - "8080:8080" # Проброс порта для доступа к UI
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local # Имя кластера для отображения в UI
+      KAFKA_CLUSTERS_0_BOOTSTRAP_SERVERS: kafka1:29092,kafka2:29092 # Адреса Kafka-брокеров
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181 # Адрес Zookeeper
+
+volumes:
+  kafka1_data: # Том для первого брокера
+  kafka2_data: # Том для второго брокера
