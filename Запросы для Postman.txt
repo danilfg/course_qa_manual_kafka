@@ -16,6 +16,15 @@ curl -X POST \
 	•	Консьюмер начинает чтение с самого первого сообщения (earliest).
 	
 
+2) Создание топика
+
+curl -X POST \
+  -H "Content-Type: application/vnd.kafka.json.v2+json" \
+  --data '{
+    "records": []
+  }' \
+  http://localhost:8082/topics/test-topic
+
 2) Подписать консьюмера my-consumer на топик test-topic.
 
 curl -X POST \
