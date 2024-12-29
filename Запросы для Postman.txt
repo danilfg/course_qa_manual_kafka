@@ -1,0 +1,43 @@
+1) Создание Consumer
+
+В Postman
+curl -X POST \
+  -H "Content-Type: application/vnd.kafka.v2+json" \
+  --data '{
+    "name": "my-consumer",
+    "format": "json",
+    "auto.offset.reset": "earliest"
+  }' \
+  http://localhost:8082/consumers/my-consumer-group
+  
+  Описание:
+	•	Создает консьюмера с именем my-consumer в группе my-consumer-group.
+	•	Формат сообщений — JSON.
+	•	Консьюмер начинает чтение с самого первого сообщения (earliest).
+	
+
+2) Подписать консьюмера my-consumer на топик test-topic.
+
+curl -X POST \
+  -H "Content-Type: application/vnd.kafka.v2+json" \
+  --data '{
+    "topics": ["test-topic"]
+  }' \
+  http://localhost:8082/consumers/my-consumer-group/instances/my-consumer/subscription
+  
+  
+ 3) Отправить сообщение
+  curl -X POST \
+  -H "Content-Type: application/vnd.kafka.json.v2+json" \
+  --data '{
+    "records": [
+      { "value": {"message": "Hello Kafka!"} }
+    ]
+  }' \
+  http://localhost:8082/topics/test-topic
+  
+  4) Вычитать сообщение из топика
+  
+  curl -X GET \
+  -H "Accept: application/vnd.kafka.json.v2+json" \
+  http://localhost:8082/consumers/my-consumer-group/instances/my-consumer/records
