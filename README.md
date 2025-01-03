@@ -38,7 +38,7 @@ Whether you're a beginner or an experienced developer, this setup simplifies wor
 
 ---
 
-## **Услуги / Services Overview**
+## **Сервисы / Services Overview**
 
 ### 1. **Zookeeper**
 - **Назначение / Purpose**: Управляет и координирует брокеров Kafka.
@@ -88,17 +88,6 @@ http://localhost:8080
    - **Коэффициент репликации / Replication Factor**: Например, `1`.
 4. Нажмите **Create**.
 
-#### Через REST Proxy / Using REST Proxy:
-Выполните следующий запрос с помощью `curl`:
-```bash
-curl -X POST \
-  -H "Content-Type: application/vnd.kafka.json.v2+json" \
-  --data '{
-    "records": []
-  }' \
-  http://localhost:8082/topics/my_topic
-```
-
 #### Через CLI / Using CLI:
 Если вы предпочитаете использовать CLI, выполните следующую команду:
 ```bash
@@ -127,6 +116,16 @@ docker exec -it kafka1 kafka-topics --create --topic my_topic --bootstrap-server
 
 ---
 
+### **Шаг 4.1 / Step 4.1**: Взаимодействие через REST Proxy / Interact via REST Proxy
+Используйте **curl**, **Postman**, или любой HTTP-клиент для работы с Kafka.  
+- Пример: Вычитка сообщения из топика:
+  ```bash
+  curl -X GET \
+  -H "Accept: application/vnd.kafka.json.v2+json" \
+  http://localhost:8082/consumers/my-consumer-group/instances/my-consumer/records
+  ```
+
+---
 ### **Шаг 5 / Step 5**: Масштабирование (опционально) / Scale Up (Optional)
 Добавьте больше брокеров в кластер, дублируя и изменяя конфигурации брокеров в `docker-compose.yml`.
 
