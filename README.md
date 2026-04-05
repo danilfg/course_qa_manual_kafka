@@ -1,162 +1,336 @@
-Автор - ментор по ручному и автоматизированному тестированию: Николаев Даниил - https://t.me/aqa_pro_mentor
-
-
-# 🚀 Кластер Apache Kafka с REST Proxy и Kafka UI
-
-### **Простое развертывание полностью функционального окружения Apache Kafka с REST Proxy и Kafka UI для удобного взаимодействия и управления.**
-
-Этот файл `docker-compose.yml` позволяет развернуть **распределённый кластер Kafka**, включающий:
-- **Zookeeper** для координации брокеров.
-- **Несколько брокеров Kafka** для обеспечения высокой доступности и отказоустойчивости.
-- **REST Proxy** для взаимодействия с Kafka через HTTP API.
-- **Kafka UI** для удобного графического интерфейса управления.
-
-Независимо от вашего уровня опыта, эта настройка упростит работу с Kafka, позволив сосредоточиться на создании мощных приложений для обработки потоковых данных.
-
----
-
 # 🚀 Apache Kafka Cluster with REST Proxy and Kafka UI
 
-### **Easily set up a fully functional Apache Kafka environment with REST Proxy and Kafka UI for seamless interaction and management.**
+![Kafka](https://img.shields.io/badge/Apache-Kafka-black?logo=apachekafka)
+![Docker](https://img.shields.io/badge/Docker-compose-blue?logo=docker)
+![Kafka UI](https://img.shields.io/badge/Kafka-UI-green)
+![REST Proxy](https://img.shields.io/badge/Kafka-REST%20Proxy-orange)
 
-This `docker-compose.yml` file allows you to spin up a **distributed Kafka cluster** that includes:
-- **Zookeeper** for broker coordination.
-- **Multiple Kafka brokers** for high availability and fault tolerance.
-- **REST Proxy** for HTTP-based interaction with Kafka.
-- **Kafka UI** for an intuitive graphical interface to monitor and manage Kafka clusters.
+This repository contains a **ready-to-run Apache Kafka cluster** designed for **learning and practicing message-based systems**.
 
-Whether you're a beginner or an experienced developer, this setup simplifies working with Kafka, letting you focus on building robust, real-time streaming applications.
+The environment includes:
 
----
+* Apache Kafka cluster
+* Zookeeper
+* Kafka REST Proxy
+* Kafka UI
 
-## **Основные возможности / Key Features**
-
-- ✅ **Распределённый кластер Kafka / Distributed Kafka Cluster**: Легко масштабируемый с несколькими брокерами.
-- ✅ **REST Proxy**: Обеспечивает взаимодействие с Kafka через HTTP.
-- ✅ **Kafka UI**: Интуитивно понятный веб-интерфейс для управления топиками, брокерами и консюмерами.
-- ✅ **Сохранение данных / Persistent Data**: Использует Docker тома для хранения данных Kafka.
+It allows you to **experiment with Kafka, send and consume messages, and explore streaming architectures** in a simple Docker environment.
 
 ---
 
-## **Сервисы / Services Overview**
+# 👨‍🏫 Author
 
-### 1. **Zookeeper**
-- **Назначение / Purpose**: Управляет и координирует брокеров Kafka.
-- **Image**: `confluentinc/cp-zookeeper:7.5.0`
-- **Порт / Port**: `2181` (порт клиента Zookeeper).
+This project is part of educational materials created by:
 
-### 2. **Kafka Brokers**
-- **Назначение / Purpose**: Обрабатывают и хранят сообщения.
-- **Брокеры в настройке / Brokers in this setup**:
-  - **kafka1**: Доступен по порту `9092` / Accessible via port `9092`.
-  - **kafka2**: Доступен по порту `9093` / Accessible via port `9093`.
-- **Image**: `confluentinc/cp-kafka:7.5.0`.
+**Daniil Nikolaev**
+Mentor in **Manual and Automation Testing**
 
-### 3. **REST Proxy**
-- **Назначение / Purpose**: Упрощает взаимодействие с Kafka через HTTP API.
-- **Image**: `confluentinc/cp-kafka-rest:7.5.0`
-- **Порт / Port**: `8082`.
-
-### 4. **Kafka UI**
-- **Назначение / Purpose**: Предоставляет удобный интерфейс для работы с кластером Kafka.
-- **Image**: `provectuslabs/kafka-ui:latest`
-- **Порт / Port**: `8080`.
+Telegram:
+[https://t.me/aqa_pro_mentor](https://t.me/aqa_pro_mentor)
 
 ---
 
-## **Как использовать / How to Use**
+# 🎓 About This Project
 
-### **Шаг 1 / Step 1**: Запустите кластер Kafka / Start the Kafka Cluster
-```bash
-docker-compose up -d
+This setup is commonly used in **QA Automation and backend testing training**.
+
+It helps students learn how to work with:
+
+* event-driven architectures
+* Kafka messaging
+* REST interaction with Kafka
+* distributed systems
+
+Students can use this environment to practice:
+
+* producing messages
+* consuming messages
+* testing event pipelines
+* debugging message flows
+
+---
+
+# 🏗 Architecture
+
+This `docker-compose.yml` file starts a **distributed Kafka environment** consisting of:
+
+| Service          | Purpose                               |
+| ---------------- | ------------------------------------- |
+| Zookeeper        | Coordinates Kafka brokers             |
+| Kafka Broker 1   | Handles message storage and streaming |
+| Kafka Broker 2   | Provides high availability            |
+| Kafka REST Proxy | Allows HTTP interaction with Kafka    |
+| Kafka UI         | Web interface for managing Kafka      |
+
+---
+
+# ⚙️ Services Overview
+
+## Zookeeper
+
+Purpose:
+
+Coordinates Kafka brokers and maintains cluster metadata.
+
+Image:
+
+```
+confluentinc/cp-zookeeper:7.5.0
 ```
 
-### **Шаг 2 / Step 2**: Доступ к Kafka UI / Access Kafka UI
-Откройте браузер и перейдите по адресу / Open your browser and go to:
+Port:
+
+```
+2181
+```
+
+---
+
+## Kafka Brokers
+
+Purpose:
+
+Store and process messages.
+
+Two brokers are included in this setup.
+
+| Broker | Port |
+| ------ | ---- |
+| kafka1 | 9092 |
+| kafka2 | 9093 |
+
+Image:
+
+```
+confluentinc/cp-kafka:7.5.0
+```
+
+This allows students to experiment with **multi-broker Kafka clusters**.
+
+---
+
+## Kafka REST Proxy
+
+Purpose:
+
+Provides an **HTTP API for interacting with Kafka**.
+
+Image:
+
+```
+confluentinc/cp-kafka-rest:7.5.0
+```
+
+Port:
+
+```
+8082
+```
+
+This allows sending and receiving Kafka messages using:
+
+* curl
+* Postman
+* automated tests
+
+---
+
+## Kafka UI
+
+Purpose:
+
+A graphical interface for working with Kafka clusters.
+
+Image:
+
+```
+provectuslabs/kafka-ui
+```
+
+Port:
+
+```
+8080
+```
+
+Kafka UI allows you to:
+
+* view topics
+* inspect messages
+* manage consumer groups
+* monitor cluster status
+
+---
+
+# 🚀 Getting Started
+
+## Step 1 — Start the Kafka cluster
+
+Run:
+
+```bash
+docker compose up -d
+```
+
+This will start all services in the background.
+
+---
+
+## Step 2 — Open Kafka UI
+
+Open your browser and navigate to:
+
 ```
 http://localhost:8080
 ```
 
-### **Шаг 3 / Step 3**: Добавьте топик / Add a Topic
+You will see the Kafka cluster dashboard.
 
-#### Через Kafka UI / Using Kafka UI:
-1. Перейдите в раздел **Topics** в интерфейсе.
-2. Нажмите кнопку **Add a Topic**.
-3. Заполните параметры:
-   - **Имя топика / Topic Name**: Например, `my_topic`.
-   - **Количество разделов / Number of Partitions**: Например, `1`.
-   - **Коэффициент репликации / Replication Factor**: Например, `1`.
-4. Нажмите **Create**.
+---
 
-#### Через CLI / Using CLI:
-Если вы предпочитаете использовать CLI, выполните следующую команду:
+# 🧵 Create a Topic
+
+## Using Kafka UI
+
+1. Open **Topics**
+2. Click **Add Topic**
+3. Fill parameters:
+
+| Field              | Example    |
+| ------------------ | ---------- |
+| Topic name         | `my_topic` |
+| Partitions         | `1`        |
+| Replication factor | `1`        |
+
+Click **Create**.
+
+---
+
+## Using CLI
+
+You can also create a topic using the Kafka CLI:
+
 ```bash
-docker exec -it kafka1 kafka-topics --create --topic my_topic --bootstrap-server kafka1:29092 --replication-factor 1 --partitions 1
+docker exec -it kafka1 kafka-topics \
+--create \
+--topic my_topic \
+--bootstrap-server kafka1:29092 \
+--replication-factor 1 \
+--partitions 1
 ```
 
 ---
 
-### **Шаг 4 / Step 4**: Взаимодействие через REST Proxy / Interact via REST Proxy
-Используйте **curl**, **Postman**, или любой HTTP-клиент для работы с Kafka.  
-- Пример: Отправка сообщения в топик / Example: Sending a message to a topic:
-  ```bash
-  curl -X POST \
-    -H "Content-Type: application/vnd.kafka.json.v2+json" \
-    --data '{
-      "records": [
-        {
-          "value": {
-            "message": "Hello, Kafka!"
-          }
-        }
-      ]
-    }' \
-    http://localhost:8082/topics/my_topic
-  ```
+# 📡 Send Messages via REST Proxy
+
+You can send messages to Kafka using **curl, Postman or automated tests**.
+
+Example:
+
+```bash
+curl -X POST \
+-H "Content-Type: application/vnd.kafka.json.v2+json" \
+--data '{
+  "records":[
+    {
+      "value":{
+        "message":"Hello Kafka"
+      }
+    }
+  ]
+}' \
+http://localhost:8082/topics/my_topic
+```
 
 ---
 
-### **Шаг 4.1 / Step 4.1**: Взаимодействие через REST Proxy / Interact via REST Proxy
-Используйте **curl**, **Postman**, или любой HTTP-клиент для работы с Kafka.  
-- Пример: Вычитка сообщения из топика:
-  ```bash
-  curl -X GET \
-  -H "Accept: application/vnd.kafka.json.v2+json" \
-  http://localhost:8082/consumers/my-consumer-group/instances/my-consumer/records
-  ```
+# 📥 Consume Messages
 
----
-### **Шаг 5 / Step 5**: Масштабирование (опционально) / Scale Up (Optional)
-Добавьте больше брокеров в кластер, дублируя и изменяя конфигурации брокеров в `docker-compose.yml`.
+Example request to read messages:
+
+```bash
+curl -X GET \
+-H "Accept: application/vnd.kafka.json.v2+json" \
+http://localhost:8082/consumers/my-consumer-group/instances/my-consumer/records
+```
 
 ---
 
-## **Сеть / Networking**
+# 📈 Scaling the Cluster (Optional)
 
-Все сервисы подключены через Docker-сеть `kafka-net` / All services are connected via the `kafka-net` Docker network:
+You can expand the cluster by adding more Kafka brokers.
+
+Simply duplicate the broker configuration in `docker-compose.yml` and adjust:
+
+* broker id
+* ports
+* volumes
+
+---
+
+# 🌐 Networking
+
+All services run inside a Docker network:
+
 ```yaml
 networks:
   kafka-net:
     driver: bridge
 ```
 
+This allows containers to communicate internally.
+
 ---
 
-## **Тома / Volumes**
+# 💾 Data Persistence
 
-Каждый брокер Kafka использует том для сохранения данных / Each Kafka broker uses a volume to persist data:
+Each Kafka broker uses Docker volumes:
+
 ```yaml
 volumes:
   kafka1_data:
   kafka2_data:
 ```
 
----
-
-## **Лицензия / License**
-
-Этот файл предоставляется под лицензией MIT / This configuration is distributed under the MIT License.
+This ensures that messages are **not lost when containers restart**.
 
 ---
 
-Наслаждайтесь удобной настройкой и работой с Kafka! 🎉 / Enjoy your seamless Kafka setup! 🎉
+# 🎓 Learning Scenarios
+
+This Kafka environment can be used for learning:
+
+### Event-Driven Testing
+
+Simulating services that communicate through Kafka events.
+
+### API Testing
+
+Testing REST Proxy endpoints.
+
+### Automation Testing
+
+Using tools like:
+
+* Pytest
+* Postman
+* k6
+* custom consumers
+
+### Observability
+
+Analyzing message flow between services.
+
+---
+
+# 📜 License
+
+This project is distributed under the **MIT License**.
+
+---
+
+# ⭐ If This Project Helps You
+
+Consider starring the repository ⭐.
+
+It helps other engineers discover this Kafka learning environment.
