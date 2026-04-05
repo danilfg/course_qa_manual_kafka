@@ -20,13 +20,15 @@ It allows you to **experiment with Kafka, send and consume messages, and explore
 
 # 👨‍🏫 Author
 
-This project is part of educational materials created by:
-
 **Daniil Nikolaev**
-Mentor in **Manual and Automation Testing**
 
-Telegram:
-[https://t.me/aqa_pro_mentor](https://t.me/aqa_pro_mentor)
+QA Automation & DevOps Engineer
+Mentor in manual and automation testing
+
+Creator of open-source learning environments for QA engineers and SDETs
+
+Telegram
+[https://t.me/danilfg](https://t.me/danilfg)
 
 ---
 
@@ -61,6 +63,39 @@ This `docker-compose.yml` file starts a **distributed Kafka environment** consis
 | Kafka Broker 2   | Provides high availability            |
 | Kafka REST Proxy | Allows HTTP interaction with Kafka    |
 | Kafka UI         | Web interface for managing Kafka      |
+
+---
+
+# 💻 Recommended Hardware
+
+Running a multi-service Kafka environment requires sufficient system resources.
+
+### Minimum requirements
+
+| Resource | Minimum          |
+| -------- | ---------------- |
+| CPU      | 2 cores          |
+| RAM      | 4 GB             |
+| Disk     | 10 GB free space |
+
+The cluster will run, but performance may be slower.
+
+### Recommended configuration
+
+| Resource | Recommended       |
+| -------- | ----------------- |
+| CPU      | 4 cores           |
+| RAM      | 8 GB              |
+| Disk     | 20+ GB free space |
+
+If you are using **Docker Desktop**, it is recommended to allocate:
+
+```
+Memory: 6–8 GB
+CPUs: 4
+```
+
+Otherwise Kafka brokers may fail to start.
 
 ---
 
